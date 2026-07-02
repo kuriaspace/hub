@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KuriaSpace Tech Hub | Connect. Build. Grow.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #1B2A4A;
+    --navy-deep: #0f1a2e;
+    --gold: #C9A227;
+    --gold-light: #e8c45a;
+    --cream: #F8F6F0;
+    --grey: #6b7280;
+    --light: #f0ede6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    background: #fff;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(27,42,74,0.97);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px; text-decoration: none;
+  }
+  .nav-logo svg { width: 42px; height: 42px; }
+  .nav-brand { color: #fff; }
+  .nav-brand span { display: block; }
+  .nav-brand .name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 600; line-height: 1;
+  }
+  .nav-brand .tag {
+    font-size: 0.6rem; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.8); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    padding: 9px 22px; border-radius: 4px;
+    font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: var(--navy-deep);
+    display: flex; align-items: center;
+    padding: 100px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-nodes {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.07;
+  }
+
+  .hero-content {
+    max-width: 620px; position: relative; z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem; letter-spacing: 4px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1.15; font-weight: 700; color: #fff;
+    margin-bottom: 24px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.8; color: rgba(255,255,255,0.7);
+    margin-bottom: 40px; max-width: 500px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 14px 32px; border-radius: 4px;
+    font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-secondary {
+    border: 1.5px solid rgba(255,255,255,0.3); color: #fff;
+    padding: 14px 32px; border-radius: 4px;
+    font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 64px;
+    padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--gold);
+  }
+  .stat-label {
+    font-size: 0.78rem; color: rgba(255,255,255,0.5);
+    letter-spacing: 1px; margin-top: 2px;
+  }
+
+  .hero-visual {
+    position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+    opacity: 0.15; z-index: 1;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 4px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700; line-height: 1.2; margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--grey); line-height: 1.8;
+    max-width: 560px;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--cream); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center; margin-top: 60px;
+  }
+  .about-mark {
+    display: flex; justify-content: center; align-items: center;
+  }
+  .about-mark svg { width: 260px; height: 260px; }
+
+  .about-text p {
+    font-size: 1rem; line-height: 1.9; color: #444;
+    margin-bottom: 20px;
+  }
+  .about-values {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 32px;
+  }
+  .value-item {
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .value-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold); margin-top: 6px; flex-shrink: 0;
+  }
+  .value-item strong { display: block; font-size: 0.9rem; font-weight: 600; }
+  .value-item span { font-size: 0.82rem; color: var(--grey); }
+
+  /* ── SERVICES ── */
+  #services { background: #fff; }
+  .services-header { max-width: 560px; margin-bottom: 60px; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .service-card {
+    background: var(--cream); border-radius: 8px;
+    padding: 40px 32px; position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(27,42,74,0.1);
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%; background: var(--gold);
+  }
+  .service-icon {
+    width: 48px; height: 48px; margin-bottom: 24px;
+  }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .service-card p { font-size: 0.9rem; color: var(--grey); line-height: 1.8; }
+  .service-card ul {
+    list-style: none; margin-top: 16px;
+  }
+  .service-card ul li {
+    font-size: 0.85rem; color: #555; padding: 4px 0;
+    padding-left: 16px; position: relative;
+  }
+  .service-card ul li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--gold); font-size: 0.8rem;
+  }
+
+  /* ── EVENTS ── */
+  #events { background: var(--navy); }
+  #events .section-title { color: #fff; }
+  #events .section-sub { color: rgba(255,255,255,0.6); }
+  .events-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 60px;
+  }
+  .event-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 28px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .event-card:hover {
+    background: rgba(201,162,39,0.08);
+    border-color: rgba(201,162,39,0.3);
+  }
+  .event-date {
+    display: inline-block;
+    background: var(--gold); color: var(--navy);
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+    padding: 4px 10px; border-radius: 2px; margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .event-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: #fff; margin-bottom: 10px;
+  }
+  .event-card p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+  .event-meta {
+    display: flex; align-items: center; gap: 16px;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .event-meta span { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+
+  /* ── COMMUNITY ── */
+  #community { background: var(--cream); }
+  .community-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start; margin-top: 60px;
+  }
+  .join-form { background: #fff; border-radius: 8px; padding: 40px; }
+  .join-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; margin-bottom: 24px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block; font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.5px; margin-bottom: 6px; color: var(--navy);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid #e0ddd6; border-radius: 4px;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    color: var(--navy); background: #fff;
+    transition: border-color 0.2s; outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { height: 90px; resize: vertical; }
+  .form-submit {
+    width: 100%; background: var(--navy); color: #fff;
+    padding: 14px; border: none; border-radius: 4px;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem;
+    font-weight: 600; letter-spacing: 0.5px;
+    cursor: pointer; transition: background 0.2s; margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--gold); color: var(--navy); }
+
+  .community-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; margin-bottom: 16px;
+  }
+  .community-info p {
+    font-size: 0.95rem; color: var(--grey); line-height: 1.9;
+    margin-bottom: 32px;
+  }
+  .membership-tiers { display: flex; flex-direction: column; gap: 16px; }
+  .tier {
+    background: #fff; border-radius: 6px; padding: 20px 24px;
+    border-left: 4px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .tier:hover { border-left-color: var(--gold); }
+  .tier-name {
+    font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--navy);
+  }
+  .tier-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: var(--gold); margin: 4px 0;
+  }
+  .tier-desc { font-size: 0.82rem; color: var(--grey); }
+
+  /* ── TEAM / FOUNDER ── */
+  #team { background: #fff; }
+  .founder-card {
+    display: flex; align-items: center; gap: 60px;
+    background: var(--cream); border-radius: 12px;
+    padding: 60px; margin-top: 60px; max-width: 900px;
+  }
+  .founder-avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: var(--navy); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; color: var(--gold); font-weight: 700;
+  }
+  .founder-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; margin-bottom: 4px;
+  }
+  .founder-role {
+    font-size: 0.78rem; letter-spacing: 3px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .founder-info p { font-size: 0.95rem; color: var(--grey); line-height: 1.9; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--navy-deep); }
+  #contact .section-title { color: #fff; }
+  #contact .section-sub { color: rgba(255,255,255,0.55); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; margin-top: 60px;
+  }
+  .contact-details { color: rgba(255,255,255,0.7); }
+  .contact-item {
+    display: flex; gap: 16px; margin-bottom: 28px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; background: rgba(201,162,39,0.15);
+    border-radius: 4px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .contact-item strong {
+    display: block; color: #fff; font-size: 0.85rem;
+    font-weight: 600; margin-bottom: 2px;
+  }
+  .contact-item span { font-size: 0.9rem; color: rgba(255,255,255,0.55); }
+  .contact-form { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 40px; }
+  .contact-form .form-group input,
+  .contact-form .form-group textarea {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .contact-form .form-group label { color: rgba(255,255,255,0.7); }
+  .contact-form .form-group input::placeholder,
+  .contact-form .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .contact-form .form-submit { background: var(--gold); color: var(--navy); }
+  .contact-form .form-submit:hover { background: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy-deep);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 40px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: rgba(255,255,255,0.6);
+  }
+  .footer-brand strong { color: #fff; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+  /* ── DIVIDER ── */
+  .gold-rule {
+    width: 48px; height: 2px; background: var(--gold);
+    margin: 24px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-grid, .community-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .services-grid, .events-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .hero-stats { gap: 28px; flex-wrap: wrap; }
+    .founder-card { flex-direction: column; padding: 36px; }
+    .nav-links, .nav-cta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="36" fill="none" stroke="#C9A227" stroke-width="1"/>
+      <line x1="40" y1="40" x2="40" y2="18" stroke="#fff" stroke-width="2"/>
+      <line x1="40" y1="40" x2="22" y2="56" stroke="#fff" stroke-width="2"/>
+      <line x1="40" y1="40" x2="58" y2="56" stroke="#fff" stroke-width="2"/>
+      <line x1="40" y1="18" x2="22" y2="56" stroke="#C9A227" stroke-width="1"/>
+      <line x1="22" y1="56" x2="58" y2="56" stroke="#C9A227" stroke-width="1"/>
+      <line x1="58" y1="56" x2="40" y2="18" stroke="#C9A227" stroke-width="1"/>
+      <circle cx="40" cy="40" r="5" fill="#fff"/>
+      <circle cx="40" cy="18" r="4" fill="#C9A227"/>
+      <circle cx="22" cy="56" r="4" fill="#C9A227"/>
+      <circle cx="58" cy="56" r="4" fill="#C9A227"/>
+    </svg>
+    <div class="nav-brand">
+      <span class="name">KuriaSpace</span>
+      <span class="tag">Tech Hub</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#about">Services</a></li>
+    <li><a href="#about">Events</a></li>
+    <li><a href="#about">Join</a></li>
+    <li><a href="#about">Contact</a></li>
+  </ul>
+  <a href="#community" class="nav-cta">Join the Hub</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <svg class="hero-nodes" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+    <circle cx="900" cy="200" r="180" fill="none" stroke="#C9A227" stroke-width="1"/>
+    <circle cx="900" cy="200" r="120" fill="none" stroke="#C9A227" stroke-width="0.5"/>
+    <line x1="900" y1="200" x2="900" y2="80" stroke="#fff" stroke-width="1.5"/>
+    <line x1="900" y1="200" x2="796" y2="290" stroke="#fff" stroke-width="1.5"/>
+    <line x1="900" y1="200" x2="1004" y2="290" stroke="#fff" stroke-width="1.5"/>
+    <line x1="900" y1="80" x2="796" y2="290" stroke="#C9A227" stroke-width="1"/>
+    <line x1="796" y1="290" x2="1004" y2="290" stroke="#C9A227" stroke-width="1"/>
+    <line x1="1004" y1="290" x2="900" y2="80" stroke="#C9A227" stroke-width="1"/>
+    <circle cx="900" cy="200" r="10" fill="#fff"/>
+    <circle cx="900" cy="80" r="7" fill="#C9A227"/>
+    <circle cx="796" cy="290" r="7" fill="#C9A227"/>
+    <circle cx="1004" cy="290" r="7" fill="#C9A227"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow"> # # # # </div>
+    <h1 class="hero-title">
+      ** <em>Comming soon</em> **
+    </h1>
+    <p class="hero-sub">
+      KuriaSpace Tech Hub is a space for builders, coders, designers, and employers to meet, connect, and grow. Coworking, networking, and skills training — all under one roof.
+    </p>
+    <div class="hero-actions">
+      <a hre="#community" class="btn-primary">Join the Community</a>
+      <a hre="#services" class="btn-secondary">Explore Services</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Core Services</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Connections Made</div>
+      </div>
+      <div>
+        <div class="stat-num">1</div>
+        <div class="stat-label">Hub. Your Hub.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div style="max-width:500px">
+    <div class="section-label">About KuriaSpace</div>
+    <h2 class="section-title">Built for the Kenyan tech community</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-mark">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="130" cy="130" r="110" fill="none" stroke="#1B2A4A" stroke-width="1.5"/>
+        <circle cx="130" cy="130" r="95" fill="none" stroke="#C9A227" stroke-width="0.5"/>
+        <line x1="130" y1="130" x2="130" y2="60" stroke="#1B2A4A" stroke-width="2.5"/>
+        <line x1="130" y1="130" x2="69" y2="200" stroke="#1B2A4A" stroke-width="2.5"/>
+        <line x1="130" y1="130" x2="191" y2="200" stroke="#1B2A4A" stroke-width="2.5"/>
+        <line x1="130" y1="60" x2="69" y2="200" stroke="#C9A227" stroke-width="1.5"/>
+        <line x1="69" y1="200" x2="191" y2="200" stroke="#C9A227" stroke-width="1.5"/>
+        <line x1="191" y1="200" x2="130" y2="60" stroke="#C9A227" stroke-width="1.5"/>
+        <circle cx="130" cy="130" r="13" fill="#1B2A4A"/>
+        <circle cx="130" cy="60" r="8" fill="#C9A227"/>
+        <circle cx="69" cy="200" r="8" fill="#C9A227"/>
+        <circle cx="191" cy="200" r="8" fill="#C9A227"/>
+      </svg>
+    </div>
+    <div class="about-text">
+      <p>KuriaSpace Tech Hub was born from a simple observation: Kenya has extraordinary tech talent, but not enough dedicated spaces where that talent can meet, collaborate, and be matched with opportunity.</p>
+      <p>We are building that space and community hub in where developers, designers, product builders, and tech employers can gather, connect, and grow together. Whether you're a fresh graduate looking for your first role, a startup founder looking for talent, or an experienced engineer who wants to give back through training — KuriaSpace is your home.</p>
+      <div class="about-values">
+        <div class="value-item">
+          <div class="value-dot"></div>
+          <div>
+            <strong>Community First</strong>
+            <span>People before products</span>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-dot"></div>
+          <div>
+            <strong>Opportunity Access</strong>
+            <span>Bridging talent and employers</span>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-dot"></div>
+          <div>
+            <strong>Practical Training</strong>
+            <span>Skills that get people hired</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <strong>KuriaSpace Tech Hub Ltd</strong> · Nairobi, Kenya · Reg. BN-B8S6MZKM
+  </div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#events">Events</a>
+    <a href="#community">Join</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 KuriaSpace Tech Hub Ltd. Connect. Build. Grow.</div>
+</footer>
+
+</body>
+</html>
