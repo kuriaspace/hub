@@ -177,39 +177,6 @@
     margin: 0 auto;
   }
 
-  /* ── TABS ── */
-  .tabs {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .tab {
-    padding: 12px 16px;
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--grey);
-    transition: all 0.2s;
-  }
-
-  .tab.active {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-  }
-
-  .tab-content {
-    display: none;
-  }
-
-  .tab-content.active {
-    display: block;
-  }
-
   /* ── FORMS ── */
   .form-section {
     background: #fff;
@@ -263,6 +230,12 @@
     min-height: 100px;
   }
 
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
   .image-upload-wrapper {
     position: relative;
   }
@@ -285,6 +258,7 @@
     position: relative;
     width: 100%;
     max-width: 300px;
+    margin-top: 16px;
   }
 
   #imagePreview img {
@@ -315,12 +289,6 @@
     background: #dc2626;
   }
 
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
   .btn {
     padding: 10px 20px;
     border: none;
@@ -340,27 +308,15 @@
     background: var(--gold-light);
   }
 
-  .btn-secondary {
-    background: #e5e7eb;
-    color: var(--navy);
-  }
-
-  .btn-secondary:hover {
-    background: #d1d5db;
-  }
-
   .btn-danger {
     background: var(--danger);
     color: #fff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
 
   .btn-danger:hover {
     background: #dc2626;
-  }
-
-  .btn-group {
-    display: flex;
-    gap: 12px;
   }
 
   /* ── EVENTS LIST ── */
@@ -407,17 +363,6 @@
     font-size: 0.85rem;
     color: #666;
     line-height: 1.5;
-  }
-
-  .event-actions {
-    display: flex;
-    gap: 8px;
-  }
-
-  .event-actions button {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    border-radius: 4px;
   }
 
   .no-events {
@@ -520,10 +465,6 @@
       transition: left 0.2s;
     }
 
-    .sidebar.open {
-      left: 0;
-    }
-
     .form-row {
       grid-template-columns: 1fr;
     }
@@ -542,14 +483,6 @@
 
     .event-item {
       grid-template-columns: 1fr;
-    }
-
-    .event-actions {
-      width: 100%;
-    }
-
-    .event-actions button {
-      flex: 1;
     }
   }
 </style>
@@ -582,9 +515,6 @@
       </div>
       <button type="submit" class="btn btn-primary">Access Admin Panel</button>
     </form>
-    <p style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--grey);">
-      Default: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 2px;">admin</code>
-    </p>
   </div>
 </div>
 
@@ -612,8 +542,6 @@
     </a>
     <ul class="sidebar-menu">
       <li><a href="#" class="menu-item active" data-tab="events">Events Management</a></li>
-      <li><a href="#" class="menu-item" data-tab="updates">Site Updates</a></li>
-      <li><a href="#" class="menu-item" data-tab="analytics">Analytics</a></li>
     </ul>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -669,7 +597,7 @@
               <label>Event Image (optional)</label>
               <div class="image-upload-wrapper">
                 <input type="file" id="eventImage" accept="image/*">
-                <small style="color: var(--grey); display: block; margin-top: 8px;">Recommended: JPG or PNG, max 2MB, square image works best</small>
+                <small style="color: var(--grey); display: block; margin-top: 8px;">Recommended: JPG or PNG, max 2MB</small>
                 <div id="imagePreview" style="margin-top: 16px;"></div>
               </div>
             </div>
@@ -682,57 +610,32 @@
           <div class="events-list" id="eventsList"></div>
         </div>
       </div>
-
-      <!-- UPDATES TAB -->
-      <div id="updates" class="tab-content">
-        <div class="form-section">
-          <h2>Site Updates</h2>
-          <div class="form-group">
-            <label>Hero Subtitle</label>
-            <textarea id="heroSub" placeholder="Update the main hero section description"></textarea>
-          </div>
-          <div class="form-group">
-            <label>About Section Description</label>
-            <textarea id="aboutText" placeholder="Update the about section text"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Contact Email</label>
-            <input type="email" id="contactEmail">
-          </div>
-          <div class="form-group">
-            <label>Contact Phone</label>
-            <input type="tel" id="contactPhone">
-          </div>
-          <button class="btn btn-primary" onclick="handleSaveUpdates()">Save Updates</button>
-        </div>
-      </div>
-
-      <!-- ANALYTICS TAB -->
-      <div id="analytics" class="tab-content">
-        <div class="form-section">
-          <h2>Site Statistics</h2>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
-            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--gold);" id="eventCount">0</div>
-              <div style="color: var(--grey); font-size: 0.9rem; margin-top: 4px;">Total Events</div>
-            </div>
-            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--gold);" id="upcomingCount">0</div>
-              <div style="color: var(--grey); font-size: 0.9rem; margin-top: 4px;">Upcoming Events</div>
-            </div>
-            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--gold);" id="lastUpdate">—</div>
-              <div style="color: var(--grey); font-size: 0.9rem; margin-top: 4px;">Last Updated</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
 <script>
-const ADMIN_PASSWORD = 'midna';
+const ADMIN_PASSWORD = 'SecureAdmin@Kenya2026';
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDU6G0VOa2Og58E5mWSjuHhrRMzYSPQdXk",
+  authDomain: "kuriaspace-809f7.firebaseapp.com",
+  databaseURL: "https://kuriaspace-809f7-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kuriaspace-809f7",
+  storageBucket: "kuriaspace-809f7.firebasestorage.app",
+  messagingSenderId: "539503194984",
+  appId: "1:539503194984:web:08af1e81b1ae11e7ff5cdd",
+  measurementId: "G-1GQ1868N5V"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 // Check if logged in
 function checkAuth() {
@@ -744,7 +647,6 @@ function checkAuth() {
     loginView.style.display = 'none';
     adminView.style.display = 'grid';
     loadEvents();
-    updateAnalytics();
     setupMenuItems();
   } else {
     loginView.style.display = 'flex';
@@ -775,7 +677,6 @@ function handleAddEvent(e) {
 
   const fileInput = document.getElementById('eventImage');
   
-  // Handle image if selected
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
     const reader = new FileReader();
@@ -793,69 +694,80 @@ function handleAddEvent(e) {
 
 function saveEvent(imageData) {
   const event = {
-    id: Date.now(),
     title: document.getElementById('eventTitle').value,
     date: document.getElementById('eventDate').value,
     time: document.getElementById('eventTime').value,
     description: document.getElementById('eventDesc').value,
     link: document.getElementById('eventLink').value,
-    image: imageData || null
+    image: imageData || null,
+    createdAt: new Date().toISOString()
   };
 
-  const events = JSON.parse(localStorage.getItem('kuriaEvents') || '[]');
-  events.push(event);
-  localStorage.setItem('kuriaEvents', JSON.stringify(events));
-  localStorage.setItem('kuriaLastUpdate', new Date().toLocaleString());
-
-  // Clear form
-  document.getElementById('eventTitle').value = '';
-  document.getElementById('eventDate').value = '';
-  document.getElementById('eventTime').value = '';
-  document.getElementById('eventDesc').value = '';
-  document.getElementById('eventLink').value = '';
-  document.getElementById('eventImage').value = '';
-  clearImagePreview();
-  
-  showAlert('Event added successfully!', 'success');
-  loadEvents();
-  updateAnalytics();
+  // Save to Firebase
+  const eventsRef = database.ref('events');
+  const newEventRef = eventsRef.push();
+  newEventRef.set(event)
+    .then(() => {
+      // Clear form
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventDate').value = '';
+      document.getElementById('eventTime').value = '';
+      document.getElementById('eventDesc').value = '';
+      document.getElementById('eventLink').value = '';
+      document.getElementById('eventImage').value = '';
+      clearImagePreview();
+      
+      showAlert('Event added successfully!', 'success');
+      loadEvents();
+    })
+    .catch(error => {
+      showAlert('Error adding event: ' + error.message, 'danger');
+    });
 }
 
-function deleteEvent(id) {
+function deleteEvent(eventId) {
   if (!confirm('Delete this event?')) return;
 
-  let events = JSON.parse(localStorage.getItem('kuriaEvents') || '[]');
-  events = events.filter(e => e.id !== id);
-  localStorage.setItem('kuriaEvents', JSON.stringify(events));
-  localStorage.setItem('kuriaLastUpdate', new Date().toLocaleString());
-
-  showAlert('Event deleted', 'success');
-  loadEvents();
-  updateAnalytics();
+  database.ref('events/' + eventId).remove()
+    .then(() => {
+      showAlert('Event deleted', 'success');
+      loadEvents();
+    })
+    .catch(error => {
+      showAlert('Error deleting event: ' + error.message, 'danger');
+    });
 }
 
 function loadEvents() {
-  const events = JSON.parse(localStorage.getItem('kuriaEvents') || '[]');
   const list = document.getElementById('eventsList');
-
-  if (events.length === 0) {
-    list.innerHTML = '<div class="no-events">No events yet. Add your first event above.</div>';
-    return;
-  }
-
-  list.innerHTML = events.map(event => `
-    <div class="event-item">
-      ${event.image ? `<img src="${event.image}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; margin-right: 16px;">` : ''}
-      <div class="event-info">
-        <div class="event-item-title">${event.title}</div>
-        <div class="event-item-date">${new Date(event.date).toLocaleDateString()} at ${event.time}</div>
-        <div class="event-item-desc">${event.description}</div>
-      </div>
-      <div class="event-actions">
-        <button class="btn btn-danger" onclick="deleteEvent(${event.id})">Delete</button>
-      </div>
-    </div>
-  `).join('');
+  const eventsRef = database.ref('events');
+  
+  eventsRef.on('value', (snapshot) => {
+    const eventsData = snapshot.val();
+    
+    if (!eventsData) {
+      list.innerHTML = '<div class="no-events">No events yet. Add your first event above.</div>';
+      return;
+    }
+    
+    let html = '';
+    Object.keys(eventsData).forEach(key => {
+      const event = eventsData[key];
+      html += `
+        <div class="event-item">
+          ${event.image ? `<img src="${event.image}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; margin-right: 16px;">` : ''}
+          <div class="event-info">
+            <div class="event-item-title">${event.title}</div>
+            <div class="event-item-date">${new Date(event.date).toLocaleDateString()} at ${event.time}</div>
+            <div class="event-item-desc">${event.description}</div>
+          </div>
+          <button class="btn btn-danger" onclick="deleteEvent('${key}')">Delete</button>
+        </div>
+      `;
+    });
+    
+    list.innerHTML = html;
+  });
 }
 
 // Image preview functionality
@@ -892,33 +804,6 @@ function clearImagePreview() {
   if (input) input.value = '';
 }
 
-function handleSaveUpdates() {
-  const updates = {
-    heroSub: document.getElementById('heroSub').value,
-    aboutText: document.getElementById('aboutText').value,
-    contactEmail: document.getElementById('contactEmail').value,
-    contactPhone: document.getElementById('contactPhone').value,
-    updated: new Date().toLocaleString()
-  };
-
-  localStorage.setItem('kuriaUpdates', JSON.stringify(updates));
-  localStorage.setItem('kuriaLastUpdate', new Date().toLocaleString());
-
-  showAlert('Site updates saved! Changes will appear on the public site.', 'success');
-  updateAnalytics();
-}
-
-function updateAnalytics() {
-  const events = JSON.parse(localStorage.getItem('kuriaEvents') || '[]');
-  const lastUpdate = localStorage.getItem('kuriaLastUpdate') || 'Never';
-  const now = new Date();
-  const upcoming = events.filter(e => new Date(e.date) >= now).length;
-
-  document.getElementById('eventCount').textContent = events.length;
-  document.getElementById('upcomingCount').textContent = upcoming;
-  document.getElementById('lastUpdate').textContent = lastUpdate.split(',')[0];
-}
-
 function showAlert(message, type) {
   const container = document.getElementById('alertContainer');
   const alert = document.createElement('div');
@@ -940,9 +825,6 @@ function setupMenuItems() {
       
       document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
       item.classList.add('active');
-      
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
     });
   });
 }

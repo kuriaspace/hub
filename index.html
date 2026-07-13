@@ -483,37 +483,64 @@
   <div class="footer-copy">© 2026 KuriaSpace Tech Hub Ltd. Connect. Build. Grow.</div>
 </footer>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
 <script>
-// Load and display events
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDU6G0VOa2Og58E5mWSjuHhrRMzYSPQdXk",
+  authDomain: "kuriaspace-809f7.firebaseapp.com",
+  databaseURL: "https://kuriaspace-809f7-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kuriaspace-809f7",
+  storageBucket: "kuriaspace-809f7.firebasestorage.app",
+  messagingSenderId: "539503194984",
+  appId: "1:539503194984:web:08af1e81b1ae11e7ff5cdd",
+  measurementId: "G-1GQ1868N5V"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Load and display events from Firebase
 function loadEvents() {
-  const events = JSON.parse(localStorage.getItem('kuriaEvents') || '[]');
   const grid = document.getElementById('eventsGrid');
   
-  if (events.length === 0) {
-    grid.innerHTML = '<div class="no-events">No upcoming events yet. Check back soon!</div>';
-    return;
-  }
-
-  // Sort events by date
-  events.sort((a, b) => new Date(a.date) - new Date(b.date));
+  // Reference to events in Firebase
+  const eventsRef = database.ref('events');
   
-  grid.innerHTML = events.map((event, idx) => `
-    <div class="event-card">
-      ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
-      <div class="event-date">${new Date(event.date).getDate()}</div>
-      <div class="event-title">${event.title}</div>
-      <div class="event-time">${event.time}</div>
-      <div class="event-desc">${event.description}</div>
-      ${event.link ? `<a href="${event.link}" class="event-link">Learn More →</a>` : ''}
-    </div>
-  `).join('');
+  // Listen for real-time updates
+  eventsRef.on('value', (snapshot) => {
+    const eventsData = snapshot.val();
+    
+    if (!eventsData || Object.keys(eventsData).length === 0) {
+      grid.innerHTML = '<div class="no-events">No upcoming events yet. Check back soon!</div>';
+      return;
+    }
+    
+    // Convert to array and sort by date
+    const events = Object.values(eventsData).sort((a, b) => 
+      new Date(a.date) - new Date(b.date)
+    );
+    
+    // Render events
+    grid.innerHTML = events.map((event) => `
+      <div class="event-card">
+        ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
+        <div class="event-date">${new Date(event.date).getDate()}</div>
+        <div class="event-title">${event.title}</div>
+        <div class="event-time">${event.time}</div>
+        <div class="event-desc">${event.description}</div>
+        ${event.link ? `<a href="${event.link}" target="_blank" class="event-link">Learn More →</a>` : ''}
+      </div>
+    `).join('');
+  });
 }
 
-// Load events on page load
+// Load events when page loads
 window.addEventListener('load', loadEvents);
-
-// Reload events if admin updated them
-window.addEventListener('storage', loadEvents);
 </script>
 </body>
 </html>
