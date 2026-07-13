@@ -614,9 +614,9 @@
   </div>
 </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+<!-- Firebase SDK (Compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
 <script>
 const ADMIN_PASSWORD = 'SecureAdmin@Kenya2026';
@@ -634,8 +634,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+let database;
+console.log('🔄 Initializing Firebase...');
+try {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  database = firebase.database();
+  console.log('✅ Firebase initialized successfully');
+} catch (error) {
+  console.error('❌ Firebase initialization error:', error);
+  alert('Firebase error: ' + error.message);
+}
 
 // Check if logged in
 function checkAuth() {
@@ -674,25 +684,37 @@ function handleLogout() {
 
 function handleAddEvent(e) {
   e.preventDefault();
+  console.log('🔄 Adding event...');
+  
+  if (!database) {
+    alert('Firebase not connected. Refresh the page.');
+    console.error('Database not initialized');
+    return;
+  }
 
   const fileInput = document.getElementById('eventImage');
   
   if (fileInput.files.length > 0) {
+    console.log('📷 Processing image...');
     const file = fileInput.files[0];
     const reader = new FileReader();
     
     reader.onload = function(event) {
       const imageData = event.target.result;
+      console.log('✅ Image loaded');
       saveEvent(imageData);
     };
     
     reader.readAsDataURL(file);
   } else {
+    console.log('📝 No image, saving event...');
     saveEvent(null);
   }
 }
 
 function saveEvent(imageData) {
+  console.log('💾 Saving event...');
+  
   const event = {
     title: document.getElementById('eventTitle').value,
     date: document.getElementById('eventDate').value,
@@ -703,11 +725,24 @@ function saveEvent(imageData) {
     createdAt: new Date().toISOString()
   };
 
+  console.log('Event data:', event);
+
+  if (!database) {
+    alert('❌ Firebase database not connected');
+    console.error('Database is null/undefined');
+    return;
+  }
+
   // Save to Firebase
   const eventsRef = database.ref('events');
   const newEventRef = eventsRef.push();
+  
+  console.log('🚀 Pushing to Firebase...');
+  
   newEventRef.set(event)
     .then(() => {
+      console.log('✅ Event saved successfully!');
+      
       // Clear form
       document.getElementById('eventTitle').value = '';
       document.getElementById('eventDate').value = '';
@@ -721,7 +756,8 @@ function saveEvent(imageData) {
       loadEvents();
     })
     .catch(error => {
-      showAlert('Error adding event: ' + error.message, 'danger');
+      console.error('❌ Error saving event:', error);
+      showAlert('Error: ' + error.message, 'danger');
     });
 }
 
