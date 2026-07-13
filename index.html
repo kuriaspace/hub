@@ -436,6 +436,49 @@
   </div>
 </section>
 
+<!-- MEMBERS SECTION -->
+<section id="members" style="background: var(--cream); padding: 100px 5%;">
+  <div style="max-width:560px">
+    <div class="section-label">Our Team</div>
+    <h2 class="section-title" style="color: var(--navy);">Meet the Leaders</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div id="membersGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 60px;">
+    <div style="text-align: center; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #e5e7eb;">
+      <div style="width: 120px; height: 120px; background: var(--gold); border-radius: 50%; margin: 0 auto 16px;"></div>
+      <div style="font-weight: 700; color: var(--navy); font-size: 1rem;">Team members coming soon</div>
+      <div style="color: var(--grey); font-size: 0.85rem; margin-top: 8px;">Add members in admin panel</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOBS BOARD -->
+<section id="jobs" style="background: var(--navy); padding: 100px 5%;">
+  <div style="max-width:560px">
+    <div class="section-label">Opportunities</div>
+    <h2 class="section-title">Join Our Community</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div id="jobsGrid" style="display: grid; gap: 24px; margin-top: 60px;">
+    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(201,162,39,0.2); border-radius: 8px; padding: 32px; color: rgba(255,255,255,0.6); text-align: center;">
+      No opportunities posted yet. Check back soon!
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); padding: 60px 5%;">
+  <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 16px;">Stay Updated</h2>
+    <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px; font-size: 1rem;">Get event updates and community news delivered to your inbox</p>
+    <form onsubmit="handleNewsletterSignup(event)" style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; justify-content: center;">
+      <input type="email" id="newsletterEmail" placeholder="Your email" required style="flex: 1; min-width: 250px; padding: 12px 16px; border: none; border-radius: 4px; font-size: 0.9rem;">
+      <button type="submit" style="background: var(--gold); color: var(--navy); padding: 12px 24px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Subscribe</button>
+    </form>
+    <div id="newsletterMessage" style="font-size: 0.85rem; color: var(--gold); min-height: 20px;"></div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div style="max-width:560px">
@@ -487,22 +530,22 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
+<!-- Load Firebase config from external file (NEVER commit config.js) -->
+<script src="config.js"></script>
+
 <script>
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDU6G0VOa2Og58E5mWSjuHhrRMzYSPQdXk",
-  authDomain: "kuriaspace-809f7.firebaseapp.com",
-  databaseURL: "https://kuriaspace-809f7-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "kuriaspace-809f7",
-  storageBucket: "kuriaspace-809f7.firebasestorage.app",
-  messagingSenderId: "539503194984",
-  appId: "1:539503194984:web:08af1e81b1ae11e7ff5cdd",
-  measurementId: "G-1GQ1868N5V"
-};
+// Firebase configuration loaded from config.js
+// Verify config is loaded
+if (typeof FIREBASE_CONFIG === 'undefined') {
+  console.error('❌ config.js not loaded! Make sure config.js exists in root directory.');
+  alert('Configuration error. Please check console.');
+}
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIG);
 const database = firebase.database();
+
+console.log('✅ Firebase initialized from config.js');
 
 // Load and display events from Firebase
 function loadEvents() {
@@ -539,8 +582,112 @@ function loadEvents() {
   });
 }
 
-// Load events when page loads
-window.addEventListener('load', loadEvents);
-</script>
+// Load members from Firebase
+function loadMembers() {
+  const grid = document.getElementById('membersGrid');
+  const membersRef = database.ref('members');
+  
+  membersRef.on('value', (snapshot) => {
+    const membersData = snapshot.val();
+    
+    if (!membersData || Object.keys(membersData).length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--grey);">
+          <p>No team members added yet</p>
+        </div>
+      `;
+      return;
+    }
+    
+    const members = Object.values(membersData);
+    grid.innerHTML = members.map((member) => `
+      <div style="text-align: center; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #e5e7eb;">
+        ${member.image ? `<img src="${member.image}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 16px;">` : `<div style="width: 120px; height: 120px; background: var(--gold); border-radius: 50%; margin: 0 auto 16px;"></div>`}
+        <div style="font-weight: 700; color: var(--navy); font-size: 1rem;">${member.name}</div>
+        <div style="color: var(--gold); font-size: 0.9rem; margin-bottom: 8px;">${member.role}</div>
+        <div style="color: var(--grey); font-size: 0.85rem; line-height: 1.6;">${member.bio}</div>
+        ${member.socialLinks ? `
+          <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: center;">
+            ${member.socialLinks.twitter ? `<a href="https://twitter.com/${member.socialLinks.twitter}" target="_blank" style="color: var(--gold); text-decoration: none;">Twitter</a>` : ''}
+            ${member.socialLinks.linkedin ? `<a href="https://linkedin.com/in/${member.socialLinks.linkedin}" target="_blank" style="color: var(--gold); text-decoration: none;">LinkedIn</a>` : ''}
+          </div>
+        ` : ''}
+      </div>
+    `).join('');
+  });
+}
+
+// Load jobs from Firebase
+function loadJobs() {
+  const grid = document.getElementById('jobsGrid');
+  const jobsRef = database.ref('jobs');
+  
+  jobsRef.on('value', (snapshot) => {
+    const jobsData = snapshot.val();
+    
+    if (!jobsData || Object.keys(jobsData).length === 0) {
+      grid.innerHTML = `
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(201,162,39,0.2); border-radius: 8px; padding: 32px; color: rgba(255,255,255,0.6); text-align: center;">
+          No opportunities posted yet. Check back soon!
+        </div>
+      `;
+      return;
+    }
+    
+    const jobs = Object.values(jobsData).sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate));
+    grid.innerHTML = jobs.map((job) => `
+      <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(201,162,39,0.2); border-radius: 8px; padding: 24px; transition: all 0.3s;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+          <div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #fff; font-weight: 700;">${job.title}</div>
+            <div style="color: var(--gold); font-size: 0.9rem; margin-bottom: 8px;">${job.company}</div>
+          </div>
+          <div style="background: var(--gold); color: var(--navy); padding: 6px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-align: center;">${job.type}</div>
+        </div>
+        <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px;">${job.description}</div>
+        ${job.salary ? `<div style="color: var(--gold); font-size: 0.9rem; margin-bottom: 12px;">💰 ${job.salary}</div>` : ''}
+        ${job.link ? `<a href="${job.link}" target="_blank" style="display: inline-block; background: var(--gold); color: var(--navy); padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">Apply Now</a>` : ''}
+      </div>
+    `).join('');
+  });
+}
+
+// Handle newsletter signup
+function handleNewsletterSignup(e) {
+  e.preventDefault();
+  const email = document.getElementById('newsletterEmail').value;
+  const message = document.getElementById('newsletterMessage');
+  
+  if (!email) return;
+  
+  // Save to Firebase
+  const subscribersRef = database.ref('subscribers');
+  const newSubRef = subscribersRef.push();
+  
+  newSubRef.set({
+    email: email,
+    subscribedAt: new Date().toISOString()
+  })
+    .then(() => {
+      message.textContent = '✅ Thanks for subscribing!';
+      message.style.color = 'var(--success)';
+      document.getElementById('newsletterEmail').value = '';
+      
+      setTimeout(() => {
+        message.textContent = '';
+      }, 3000);
+    })
+    .catch(error => {
+      message.textContent = '❌ Error: ' + error.message;
+      message.style.color = 'var(--danger)';
+    });
+}
+
+// Load everything when page loads
+window.addEventListener('load', function() {
+  loadEvents();
+  loadMembers();
+  loadJobs();
+});</script>
 </body>
 </html>
