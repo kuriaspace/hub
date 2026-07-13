@@ -542,9 +542,6 @@
     </a>
     <ul class="sidebar-menu">
       <li><a href="#" class="menu-item active" data-tab="events">Events Management</a></li>
-      <li><a href="#" class="menu-item" data-tab="members">Team Members</a></li>
-      <li><a href="#" class="menu-item" data-tab="jobs">Job Board</a></li>
-      <li><a href="#" class="menu-item" data-tab="newsletter">Newsletter</a></li>
     </ul>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -613,116 +610,6 @@
           <div class="events-list" id="eventsList"></div>
         </div>
       </div>
-
-      <!-- MEMBERS TAB -->
-      <div id="members" class="tab-content">
-        <div class="form-section">
-          <h2>Add Team Member</h2>
-          <form onsubmit="handleAddMember(event)">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Member Name</label>
-                <input type="text" id="memberName" required>
-              </div>
-              <div class="form-group">
-                <label>Role/Title</label>
-                <input type="text" id="memberRole" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Bio</label>
-              <textarea id="memberBio" required></textarea>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Twitter Handle (optional)</label>
-                <input type="text" id="memberTwitter" placeholder="@username">
-              </div>
-              <div class="form-group">
-                <label>LinkedIn Username (optional)</label>
-                <input type="text" id="memberLinkedin">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Profile Image (optional)</label>
-              <div class="image-upload-wrapper">
-                <input type="file" id="memberImage" accept="image/*">
-                <div id="memberImagePreview" style="margin-top: 16px;"></div>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Member</button>
-          </form>
-        </div>
-
-        <div class="form-section">
-          <h2>Manage Members</h2>
-          <div class="events-list" id="membersList"></div>
-        </div>
-      </div>
-
-      <!-- JOBS TAB -->
-      <div id="jobs" class="tab-content">
-        <div class="form-section">
-          <h2>Post Job Opportunity</h2>
-          <form onsubmit="handleAddJob(event)">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Job Title</label>
-                <input type="text" id="jobTitle" required>
-              </div>
-              <div class="form-group">
-                <label>Company</label>
-                <input type="text" id="jobCompany" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Job Type</label>
-                <select id="jobType" required>
-                  <option value="">Select type...</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Freelance">Freelance</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Salary Range (optional)</label>
-                <input type="text" id="jobSalary" placeholder="e.g. $30k - $50k">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Description</label>
-              <textarea id="jobDescription" required></textarea>
-            </div>
-            <div class="form-group">
-              <label>Apply Link (optional)</label>
-              <input type="url" id="jobLink">
-            </div>
-            <button type="submit" class="btn btn-primary">Post Job</button>
-          </form>
-        </div>
-
-        <div class="form-section">
-          <h2>Manage Jobs</h2>
-          <div class="events-list" id="jobsList"></div>
-        </div>
-      </div>
-
-      <!-- NEWSLETTER TAB -->
-      <div id="newsletter" class="tab-content">
-        <div class="form-section">
-          <h2>Newsletter Subscribers</h2>
-          <div style="margin-bottom: 20px; display: flex; gap: 12px;">
-            <button class="btn btn-primary" onclick="exportSubscribers()">📥 Export Emails</button>
-            <div id="subscriberStats" style="flex: 1; padding: 12px 16px; background: #f3f4f6; border-radius: 4px; color: var(--navy);">
-              Loading subscribers...
-            </div>
-          </div>
-          <div class="events-list" id="subscribersList"></div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -731,25 +618,30 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
 
-<!-- Load Firebase config from external file (NEVER commit config.js) -->
-<script src="config.js"></script>
-
 <script>
-// Verify config is loaded
-if (typeof FIREBASE_CONFIG === 'undefined' || typeof ADMIN_PASSWORD === 'undefined') {
-  console.error('❌ config.js not loaded! Make sure config.js exists in root directory.');
-  alert('Configuration error. Please check console. Make sure config.js is in the repo root.');
-}
+const ADMIN_PASSWORD = 'SecureAdmin@Kenya2026';
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDU6G0VOa2Og58E5mWSjuHhrRMzYSPQdXk",
+  authDomain: "kuriaspace-809f7.firebaseapp.com",
+  databaseURL: "https://kuriaspace-809f7-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kuriaspace-809f7",
+  storageBucket: "kuriaspace-809f7.firebasestorage.app",
+  messagingSenderId: "539503194984",
+  appId: "1:539503194984:web:08af1e81b1ae11e7ff5cdd",
+  measurementId: "G-1GQ1868N5V"
+};
 
 // Initialize Firebase
 let database;
 console.log('🔄 Initializing Firebase...');
 try {
   if (!firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG);
+    firebase.initializeApp(firebaseConfig);
   }
   database = firebase.database();
-  console.log('✅ Firebase initialized from config.js');
+  console.log('✅ Firebase initialized successfully');
 } catch (error) {
   console.error('❌ Firebase initialization error:', error);
   alert('Firebase error: ' + error.message);
@@ -961,277 +853,6 @@ function showAlert(message, type) {
   setTimeout(() => alert.remove(), 5000);
 }
 
-// ========== MEMBERS MANAGEMENT ==========
-function handleAddMember(e) {
-  e.preventDefault();
-  console.log('🔄 Adding member...');
-  
-  const fileInput = document.getElementById('memberImage');
-  
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      saveMember(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  } else {
-    saveMember(null);
-  }
-}
-
-function saveMember(imageData) {
-  const member = {
-    name: document.getElementById('memberName').value,
-    role: document.getElementById('memberRole').value,
-    bio: document.getElementById('memberBio').value,
-    image: imageData || null,
-    socialLinks: {
-      twitter: document.getElementById('memberTwitter').value || null,
-      linkedin: document.getElementById('memberLinkedin').value || null
-    },
-    createdAt: new Date().toISOString()
-  };
-
-  const membersRef = database.ref('members');
-  const newMemberRef = membersRef.push();
-  
-  newMemberRef.set(member)
-    .then(() => {
-      document.getElementById('memberName').value = '';
-      document.getElementById('memberRole').value = '';
-      document.getElementById('memberBio').value = '';
-      document.getElementById('memberTwitter').value = '';
-      document.getElementById('memberLinkedin').value = '';
-      document.getElementById('memberImage').value = '';
-      clearImagePreview('memberImagePreview');
-      
-      showAlert('Member added successfully!', 'success');
-      loadMembers();
-    })
-    .catch(error => {
-      showAlert('Error: ' + error.message, 'danger');
-    });
-}
-
-function deleteMember(memberId) {
-  if (!confirm('Delete this member?')) return;
-  
-  database.ref('members/' + memberId).remove()
-    .then(() => {
-      showAlert('Member deleted', 'success');
-      loadMembers();
-    })
-    .catch(error => {
-      showAlert('Error: ' + error.message, 'danger');
-    });
-}
-
-function loadMembers() {
-  const list = document.getElementById('membersList');
-  const membersRef = database.ref('members');
-  
-  membersRef.on('value', (snapshot) => {
-    const membersData = snapshot.val();
-    
-    if (!membersData) {
-      list.innerHTML = '<div class="no-events">No members added yet.</div>';
-      return;
-    }
-    
-    let html = '';
-    Object.keys(membersData).forEach(key => {
-      const member = membersData[key];
-      html += `
-        <div class="event-item">
-          ${member.image ? `<img src="${member.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; margin-right: 16px;">` : ''}
-          <div class="event-info">
-            <div class="event-item-title">${member.name}</div>
-            <div class="event-item-date">${member.role}</div>
-            <div class="event-item-desc">${member.bio}</div>
-          </div>
-          <button class="btn btn-danger" onclick="deleteMember('${key}')">Delete</button>
-        </div>
-      `;
-    });
-    list.innerHTML = html;
-  });
-}
-
-// ========== JOBS MANAGEMENT ==========
-function handleAddJob(e) {
-  e.preventDefault();
-  console.log('🔄 Adding job...');
-  
-  const job = {
-    title: document.getElementById('jobTitle').value,
-    company: document.getElementById('jobCompany').value,
-    type: document.getElementById('jobType').value,
-    salary: document.getElementById('jobSalary').value || null,
-    description: document.getElementById('jobDescription').value,
-    link: document.getElementById('jobLink').value || null,
-    postedDate: new Date().toISOString()
-  };
-
-  const jobsRef = database.ref('jobs');
-  const newJobRef = jobsRef.push();
-  
-  newJobRef.set(job)
-    .then(() => {
-      document.getElementById('jobTitle').value = '';
-      document.getElementById('jobCompany').value = '';
-      document.getElementById('jobType').value = '';
-      document.getElementById('jobSalary').value = '';
-      document.getElementById('jobDescription').value = '';
-      document.getElementById('jobLink').value = '';
-      
-      showAlert('Job posted successfully!', 'success');
-      loadJobs();
-    })
-    .catch(error => {
-      showAlert('Error: ' + error.message, 'danger');
-    });
-}
-
-function deleteJob(jobId) {
-  if (!confirm('Delete this job posting?')) return;
-  
-  database.ref('jobs/' + jobId).remove()
-    .then(() => {
-      showAlert('Job deleted', 'success');
-      loadJobs();
-    })
-    .catch(error => {
-      showAlert('Error: ' + error.message, 'danger');
-    });
-}
-
-function loadJobs() {
-  const list = document.getElementById('jobsList');
-  const jobsRef = database.ref('jobs');
-  
-  jobsRef.on('value', (snapshot) => {
-    const jobsData = snapshot.val();
-    
-    if (!jobsData) {
-      list.innerHTML = '<div class="no-events">No jobs posted yet.</div>';
-      return;
-    }
-    
-    let html = '';
-    Object.keys(jobsData).forEach(key => {
-      const job = jobsData[key];
-      html += `
-        <div class="event-item">
-          <div class="event-info">
-            <div class="event-item-title">${job.title}</div>
-            <div class="event-item-date">${job.company} • ${job.type}</div>
-            <div class="event-item-desc">${job.description}</div>
-            ${job.salary ? `<div style="color: var(--gold); margin-top: 8px; font-size: 0.9rem;">${job.salary}</div>` : ''}
-          </div>
-          <button class="btn btn-danger" onclick="deleteJob('${key}')">Delete</button>
-        </div>
-      `;
-    });
-    list.innerHTML = html;
-  });
-}
-
-// ========== NEWSLETTER MANAGEMENT ==========
-function loadSubscribers() {
-  const list = document.getElementById('subscribersList');
-  const stats = document.getElementById('subscriberStats');
-  const subscribersRef = database.ref('subscribers');
-  
-  subscribersRef.on('value', (snapshot) => {
-    const subscribersData = snapshot.val();
-    
-    if (!subscribersData) {
-      list.innerHTML = '<div class="no-events">No subscribers yet.</div>';
-      stats.textContent = '📧 0 subscribers';
-      return;
-    }
-    
-    const subscribers = Object.values(subscribersData);
-    stats.textContent = `📧 ${subscribers.length} subscriber${subscribers.length !== 1 ? 's' : ''}`;
-    
-    let html = '';
-    subscribers.forEach((subscriber, index) => {
-      html += `
-        <div class="event-item">
-          <div class="event-info">
-            <div class="event-item-title">${subscriber.email}</div>
-            <div class="event-item-date">Subscribed: ${new Date(subscriber.subscribedAt).toLocaleDateString()}</div>
-          </div>
-        </div>
-      `;
-    });
-    list.innerHTML = html;
-  });
-}
-
-function exportSubscribers() {
-  const subscribersRef = database.ref('subscribers');
-  
-  subscribersRef.once('value', (snapshot) => {
-    const subscribersData = snapshot.val();
-    
-    if (!subscribersData) {
-      alert('No subscribers to export');
-      return;
-    }
-    
-    const subscribers = Object.values(subscribersData);
-    const emails = subscribers.map(s => s.email).join('\n');
-    
-    // Create downloadable file
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(emails));
-    element.setAttribute('download', 'kuriaspace-subscribers.txt');
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-    
-    showAlert(`Exported ${subscribers.length} emails`, 'success');
-  });
-}
-
-// ========== IMAGE PREVIEW ==========
-document.addEventListener('DOMContentLoaded', function() {
-  const memberImageInput = document.getElementById('memberImage');
-  if (memberImageInput) {
-    memberImageInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          showImagePreview(event.target.result, 'memberImagePreview');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-});
-
-function showImagePreview(src, previewId) {
-  const preview = document.getElementById(previewId);
-  preview.innerHTML = `
-    <img src="${src}" alt="Preview" style="max-width: 300px; border-radius: 6px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
-    <button type="button" class="preview-remove" onclick="clearImagePreview('${previewId}')">Remove Image</button>
-  `;
-  preview.classList.add('has-image');
-}
-
-function clearImagePreview(previewId) {
-  const preview = document.getElementById(previewId);
-  const inputId = previewId.replace('Preview', '');
-  const input = document.getElementById(inputId);
-  preview.innerHTML = '';
-  preview.classList.remove('has-image');
-  if (input) input.value = '';
-}
-
 function setupMenuItems() {
   document.querySelectorAll('.menu-item').forEach(item => {
     item.addEventListener('click', (e) => {
@@ -1240,14 +861,6 @@ function setupMenuItems() {
       
       document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
       item.classList.add('active');
-      
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      
-      // Load data when tab is opened
-      if (tab === 'members') loadMembers();
-      if (tab === 'jobs') loadJobs();
-      if (tab === 'newsletter') loadSubscribers();
     });
   });
 }
