@@ -175,11 +175,12 @@
     border-radius: 6px;
     margin-bottom: 16px;
   }
+
   .event-date {
     background: var(--gold); color: var(--navy);
-    width: 60px; height: 60px; display: flex; align-items: center;
-    justify-content: center; border-radius: 4px; font-weight: 700;
-    font-size: 1.1rem; margin-bottom: 16px;
+    display: inline-flex; align-items: center;
+    padding: 8px 14px; border-radius: 4px; font-weight: 700;
+    font-size: 0.95rem; margin-bottom: 16px;
   }
   .event-title {
     font-family: 'Playfair Display', serif;
@@ -529,7 +530,7 @@ function loadEvents() {
     grid.innerHTML = events.map((event) => `
       <div class="event-card">
         ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
-        <div class="event-date">${new Date(event.date).getDate()}</div>
+        <div class="event-date">${new Date(event.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
         <div class="event-title">${event.title}</div>
         <div class="event-time">${event.time}</div>
         <div class="event-desc">${event.description}</div>
